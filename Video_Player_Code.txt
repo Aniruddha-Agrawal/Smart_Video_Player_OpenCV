@@ -1,0 +1,48 @@
+import pyautogui 
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+import time
+
+face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml') #Using pretrained haar classifier
+
+cap=cv2.VideoCapture(0)
+count=0
+steps=0
+
+while True:
+    ret, img=cap.read()
+    gray=cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+    faces=face_cascade.detectMultiScale(gray,1.3,5)
+
+    """
+    Would like to add something to pause the video when (faces==())
+    """
+
+    for (x,y,w,h) in faces:
+        cv2.rectangle(img,(x,y),(x+w,y+h),(255,0,0),2)
+        a=(x+w)/2 #x coordinate of center of rectangle
+        b=(y+h)/2 #y coordinate of center of rectangle
+        print(a,b)
+        if(a>251 and steps%2==0):       #When looking left away from screen
+            pyautogui.press('space')
+            print("Video Paused")
+            steps=1
+        if(a<228 and steps%2==0):       #When looking right away from screen
+            pyautogui.press('space')
+            print("Video Paused")
+            steps=1
+        if((a<=250 and a>=228) and steps%2!=0): #When looking towards screen
+            pyautogui.press('space')
+            print("Video played")
+            steps=2
+            
+    cv2.imshow('img',img)
+    k=cv2.waitKey(30)& 0xff
+    if k==27:
+        break
+
+
+cap.release()
+cv2.destroyAllWindows()
+    
