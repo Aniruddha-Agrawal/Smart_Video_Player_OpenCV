@@ -1,3 +1,7 @@
+"""
+Downloaded the haarcascade from https://github.com/opencv/opencv/tree/master/data/haarcascades
+"""
+
 import pyautogui 
 import cv2
 import numpy as np
